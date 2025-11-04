@@ -1,0 +1,5 @@
+{
+  "name": "Industrial Tool Tracking System",
+  "description": "A comprehensive system for controlling and tracking industrial tools using unique identifiers. It allows for real-time registration, monitoring, and management of tool loans, returns, maintenance, and inventory across different work shifts.",
+  "requestFramePermissions": []
+}

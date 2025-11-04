@@ -1,0 +1,125 @@
+
+import { Tool, User, LoanRecord, ToolStatus, ToolCategory, Shift, UserRole } from './types';
+
+export const MOCK_USERS: User[] = [
+  { id: 'USER-001', name: 'Juan Perez', role: UserRole.Mechanic, avatarUrl: 'https://i.pravatar.cc/150?u=USER-001', accessZones: ['Taller Principal', 'Almacén A'], password: 'password123' },
+  { id: 'USER-002', name: 'Maria Garcia', role: UserRole.Electric, avatarUrl: 'https://i.pravatar.cc/150?u=USER-002', accessZones: ['Taller Principal', 'Zona de Eléctricos', 'Almacén B'], password: 'password123' },
+  { id: 'USER-003', name: 'Carlos Rodriguez', role: UserRole.Supervisor, avatarUrl: 'https://i.pravatar.cc/150?u=USER-003', accessZones: ['Taller Principal', 'Oficina', 'Almacén A', 'Almacén B'], password: 'password123' },
+  { id: 'USER-004', name: 'Ana Martinez', role: UserRole.Administrator, avatarUrl: 'https://i.pravatar.cc/150?u=USER-004', accessZones: ['*'], password: 'password123' },
+];
+
+export const MOCK_TOOLS: Tool[] = [
+  {
+    id: 'ELEC-001',
+    name: 'Amperímetro Digital',
+    category: ToolCategory.Electric,
+    brand: 'Fluke',
+    status: ToolStatus.Available,
+    location: 'Estante A-1',
+    acquisitionDate: '2023-01-15',
+    lifespan: 36,
+    observations: 'Calibración anual requerida.',
+    imageUrl: `https://placehold.co/100x100/3498db/ffffff?text=AMP`,
+    procedureUrl: '/docs/amperimetro.pdf',
+    isMeasuringInstrument: true,
+    hasCertification: true,
+    lastCalibrationDate: new Date(Date.now() - 6 * 30 * 24 * 60 * 60 * 1000).toISOString(), // 6 months ago
+    nextCalibrationDate: new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000).toISOString(), // in 6 months
+    calibrationCertificateType: 'url',
+    calibrationCertificateValue: 'https://www.fluke.com/en-us/support/manuals/calibration-certificates',
+  },
+  {
+    id: 'MECH-001',
+    name: 'Llave Stillson 14"',
+    category: ToolCategory.Mechanic,
+    brand: 'Ridgid',
+    status: ToolStatus.Borrowed,
+    location: 'Taller Principal',
+    acquisitionDate: '2022-11-20',
+    lifespan: 60,
+    observations: '',
+    currentUser: 'USER-001',
+    borrowedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
+    estimatedReturnAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2 hours from now
+    imageUrl: `https://placehold.co/100x100/e74c3c/ffffff?text=LLAVE`,
+    procedureUrl: '/docs/llave-stillson.pdf',
+  },
+  {
+    id: 'ELEC-002',
+    name: 'Megómetro',
+    category: ToolCategory.Electric,
+    brand: 'Megger',
+    status: ToolStatus.InMaintenance,
+    location: 'Área de Mantenimiento',
+    acquisitionDate: '2023-03-10',
+    lifespan: 48,
+    observations: 'Reparando pantalla.',
+    imageUrl: `https://placehold.co/100x100/2ecc71/ffffff?text=MEG`,
+    procedureUrl: '/docs/megometro.pdf',
+    isMeasuringInstrument: true,
+    hasCertification: true,
+    lastCalibrationDate: new Date(Date.now() - 13 * 30 * 24 * 60 * 60 * 1000).toISOString(), // 13 months ago (expired)
+    nextCalibrationDate: new Date(Date.now() - 1 * 30 * 24 * 60 * 60 * 1000).toISOString(), // expired 1 month ago
+    calibrationCertificateType: 'file',
+    // Fake base64 for demonstration
+    calibrationCertificateValue: 'data:application/pdf;base64,JVBERi0xLjQKJ...',
+  },
+  {
+    id: 'MECH-002',
+    name: 'Juego de Dados Métricos',
+    category: ToolCategory.Mechanic,
+    brand: 'Craftsman',
+    status: ToolStatus.Available,
+    location: 'Gabinete 3',
+    acquisitionDate: '2023-05-01',
+    lifespan: 120,
+    observations: 'Completo, 42 piezas.',
+    imageUrl: `https://placehold.co/100x100/f1c40f/ffffff?text=DADOS`,
+    procedureUrl: '/docs/juego-dados.pdf',
+  },
+  {
+    id: 'ELEC-003',
+    name: 'Taladro Inalámbrico 18V',
+    category: ToolCategory.Electric,
+    brand: 'DeWalt',
+    status: ToolStatus.Borrowed,
+    location: 'Taller Principal',
+    acquisitionDate: '2023-02-28',
+    lifespan: 36,
+    observations: 'Incluye 2 baterías y cargador.',
+    currentUser: 'USER-002',
+    borrowedAt: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString(), // 10 hours ago (overdue)
+    estimatedReturnAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // Was due 2 hours ago
+    imageUrl: `https://placehold.co/100x100/9b59b6/ffffff?text=TALADRO`,
+    procedureUrl: '/docs/taladro-inalambrico.pdf',
+  },
+  {
+    id: 'MECH-003',
+    name: 'Alicate de Presión',
+    category: ToolCategory.Mechanic,
+    brand: 'Vise-Grip',
+    status: ToolStatus.Decommissioned,
+    location: 'Almacén de Bajas',
+    acquisitionDate: '2021-08-15',
+    lifespan: 24,
+    observations: 'Mandíbula rota.',
+    imageUrl: `https://placehold.co/100x100/34495e/ffffff?text=ALICATE`,
+    procedureUrl: '/docs/alicate-presion.pdf',
+  },
+];
+
+export const MOCK_LOAN_RECORDS: LoanRecord[] = [
+    { id: 'loan-1', toolId: 'MECH-001', userId: 'USER-001', checkoutDate: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), shift: Shift.T1 },
+    { id: 'loan-2', toolId: 'ELEC-003', userId: 'USER-002', checkoutDate: new Date(Date.now() - 10 * 60 * 60 * 1000).toISOString(), shift: Shift.T3 },
+    { id: 'loan-3', toolId: 'ELEC-001', userId: 'USER-002', checkoutDate: '2023-10-25T10:00:00Z', checkinDate: '2023-10-25T14:30:00Z', shift: Shift.T1 },
+    { id: 'loan-4', toolId: 'MECH-002', userId: 'USER-003', checkoutDate: '2024-05-10T09:00:00Z', checkinDate: '2024-05-10T17:00:00Z', shift: Shift.T1 },
+    { id: 'loan-5', toolId: 'ELEC-001', userId: 'USER-003', checkoutDate: '2024-05-12T11:00:00Z', checkinDate: '2024-05-12T15:00:00Z', shift: Shift.T1 },
+
+];
+
+export const STATUS_STYLES: { [key in ToolStatus]: { bg: string; text: string; border: string } } = {
+  [ToolStatus.Available]: { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-500' },
+  [ToolStatus.Borrowed]: { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-500' },
+  [ToolStatus.InMaintenance]: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-500' },
+  [ToolStatus.Decommissioned]: { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-500' },
+};

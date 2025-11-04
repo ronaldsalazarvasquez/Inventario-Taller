@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Industrial Tool Tracking System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-primary': '#4F46E5', // Indigo 600
+              'brand-secondary': '#10B981', // Emerald 500
+              'brand-accent': '#F59E0B', // Amber 500
+              'brand-background': '#F8FAFC', // Slate 50
+              'brand-surface': '#FFFFFF',
+              'brand-text-primary': '#1E293B', // Slate 800
+              'brand-text-secondary': '#64748B', // Slate 500
+            },
+            animation: {
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'fall': 'fall 1s ease-in forwards',
+            },
+            keyframes: {
+                fall: {
+                    '0%': { transform: 'translateY(-100px) rotate(-15deg)', opacity: '1' },
+                    '100%': { transform: 'translateY(100px) rotate(30deg)', opacity: '0' },
+                }
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-brand-background">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
