@@ -9,6 +9,7 @@ import { Settings } from './components/Settings';
 import { DataProvider, useData } from './context/DataContext';
 import { UserProfile } from './components/UserProfile';
 import { Login } from './components/Login';
+import { LOTO } from './components/LOTO';
 
 type View = 'dashboard' | 'tools' | 'checkinout' | 'reports' | 'settings' | 'profile';
 
@@ -36,6 +37,9 @@ const AppLayout: React.FC = () => {
         return <Settings />;
       case 'profile':
         return <UserProfile />;
+      case 'loto':
+        return <LOTO />;
+
       default:
         return <Dashboard setView={setCurrentView} />;
     }

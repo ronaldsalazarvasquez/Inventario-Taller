@@ -115,3 +115,44 @@ export interface DecommissionRecord {
   replacementReason: string;
   replacementStatus: ReplacementStatus;
 }
+
+// Agregar estos tipos al final del archivo types.ts
+
+export enum LockoutDeviceType {
+  Electric = 'Eléctrico',
+  Mechanical = 'Mecánico',
+}
+
+export enum LockoutDeviceStatus {
+  Available = 'Disponible',
+  InUse = 'En Uso',
+  Damaged = 'Dañado',
+  OutOfService = 'Fuera de Servicio',
+}
+
+export interface LockoutDevice {
+  id: string;
+  name: string;
+  type: LockoutDeviceType;
+  status: LockoutDeviceStatus;
+  brand: string;
+  color?: string;
+  acquisitionDate: string;
+  location: string;
+  observations?: string;
+  imageUrl?: string;
+  currentUserId?: string;
+}
+
+export interface LockoutUsageRecord {
+  id: string;
+  deviceId: string;
+  userId: string;
+  startDate: string;
+  endDate?: string;
+  lockLocation: string;
+  lockReason: string;
+  workPermitNumber?: string;
+  photoUrl?: string;
+  notes?: string;
+}

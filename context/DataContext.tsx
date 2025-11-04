@@ -1,6 +1,10 @@
-
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Tool, User, LoanRecord, DecommissionRecord, MaintenanceRecord, ToolStatus, ToolCategory, Shift, ReplacementStatus, UserRole, MaintenanceType, Notification, NotificationType } from '../types';
+import { 
+  Tool, User, LoanRecord, DecommissionRecord, MaintenanceRecord, 
+  ToolStatus, ToolCategory, Shift, ReplacementStatus, UserRole, 
+  MaintenanceType, Notification, NotificationType,
+  LockoutDevice, LockoutUsageRecord, LockoutDeviceStatus 
+} from '../types';
 import { MOCK_TOOLS, MOCK_USERS, MOCK_LOAN_RECORDS } from '../constants';
 
 interface AppSettings {
@@ -16,6 +20,8 @@ interface DataContextType {
   settings: AppSettings;
   notifications: Notification[];
   authenticatedUser: User | null;
+  lockoutDevices: LockoutDevice[];
+  lockoutUsageRecords: LockoutUsageRecord[];
   getToolById: (id: string) => Tool | undefined;
   getUserById: (id: string) => User | undefined;
   checkOutTool: (userId: string, toolId: string, estimatedReturn: Date) => void;
@@ -32,6 +38,10 @@ interface DataContextType {
   markAllNotificationsAsRead: () => void;
   login: (userId: string, password: string) => boolean;
   logout: () => void;
+  addLockoutDevice: (device: Omit<LockoutDevice, 'currentUserId'>) => void;
+  updateLockoutDevice: (id: string, updates: Partial<LockoutDevice>) => void;
+  addLockoutUsageRecord: (data: Omit<LockoutUsageRecord, 'id' | 'startDate'>) => void;
+  endLockoutUsage: (recordId: string) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -44,6 +54,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [settings, setSettings] = useState<AppSettings>({ calibrationWarningDays: 30 });
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
+  const [lockoutDevices, setLockoutDevices] = useState<LockoutDevice[]>([]);
+  const [lockoutUsageRecords, setLockoutUsageRecords] = useState<LockoutUsageRecord[]>([]);
   const [decommissionRecords, setDecommissionRecords] = useState<DecommissionRecord[]>([
     {
         toolId: 'MECH-003',
@@ -234,8 +246,80 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setSettings(prev => ({...prev, ...newSettings}));
   };
 
+  // ========== FUNCIONES LOTO ==========
+  const addLockoutDevice = (device: Omit<LockoutDevice, 'currentUserId'>) => {
+    setLockoutDevices(prev => [...prev, { ...device, currentUserId: undefined }]);
+  };
+
+  const updateLockoutDevice = (id: string, updates: Partial<LockoutDevice>) => {
+    setLockoutDevices(prev => prev.map(d => d.id === id ? { ...d, ...updates } : d));
+  };
+
+  const addLockoutUsageRecord = (data: Omit<LockoutUsageRecord, 'id' | 'startDate'>) => {
+    const newRecord: LockoutUsageRecord = {
+      ...data,
+      id: `LUR-${Date.now()}`,
+      startDate: new Date().toISOString(),
+    };
+    setLockoutUsageRecords(prev => [...prev, newRecord]);
+    
+    // Actualizar estado del dispositivo
+    setLockoutDevices(prev => prev.map(d => 
+      d.id === data.deviceId 
+        ? { ...d, status: LockoutDeviceStatus.InUse, currentUserId: data.userId }
+        : d
+    ));
+  };
+
+  const endLockoutUsage = (recordId: string) => {
+    const record = lockoutUsageRecords.find(r => r.id === recordId);
+    if (!record) return;
+    
+    setLockoutUsageRecords(prev => prev.map(r => 
+      r.id === recordId ? { ...r, endDate: new Date().toISOString() } : r
+    ));
+    
+    // Actualizar estado del dispositivo
+    setLockoutDevices(prev => prev.map(d => 
+      d.id === record.deviceId 
+        ? { ...d, status: LockoutDeviceStatus.Available, currentUserId: undefined }
+        : d
+    ));
+  };
+
   return (
-    <DataContext.Provider value={{ tools, users, loanRecords, getToolById, getUserById, checkOutTool, checkInTool, updateTool, addTool, decommissionRecords, decommissionTool, updateReplacementStatus, addUser, updateUser, deleteUser, maintenanceRecords, sendToolToMaintenance, settings, updateSettings, notifications, markAllNotificationsAsRead, authenticatedUser, login, logout }}>
+    <DataContext.Provider value={{ 
+      tools, 
+      users, 
+      loanRecords, 
+      getToolById, 
+      getUserById, 
+      checkOutTool, 
+      checkInTool, 
+      updateTool, 
+      addTool, 
+      decommissionRecords, 
+      decommissionTool, 
+      updateReplacementStatus, 
+      addUser, 
+      updateUser, 
+      deleteUser, 
+      maintenanceRecords, 
+      sendToolToMaintenance, 
+      settings, 
+      updateSettings, 
+      notifications, 
+      markAllNotificationsAsRead, 
+      authenticatedUser, 
+      login, 
+      logout,
+      lockoutDevices,
+      lockoutUsageRecords,
+      addLockoutDevice,
+      updateLockoutDevice,
+      addLockoutUsageRecord,
+      endLockoutUsage
+    }}>
       {children}
     </DataContext.Provider>
   );

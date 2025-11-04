@@ -1,9 +1,9 @@
 // Sidebar.tsx
 import React from 'react';
-import { DashboardIcon, WrenchScrewdriverIcon, ArrowRightLeftIcon, ChartBarIcon, CogIcon, LogoutIcon } from './common/Icon';
+import { DashboardIcon, WrenchScrewdriverIcon, ArrowRightLeftIcon, ChartBarIcon, CogIcon, LogoutIcon, ShieldCheckIcon } from './common/Icon';
 import { useData } from '../context/DataContext';
 
-type View = 'dashboard' | 'tools' | 'checkinout' | 'reports' | 'settings' | 'profile';
+type View = 'dashboard' | 'tools' | 'checkinout' | 'reports' | 'settings' | 'profile' | 'loto';
 
 interface SidebarProps {
   currentView: View;
@@ -71,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, setView, isOpen, 
   const navItems = [
     { id: 'dashboard', icon: DashboardIcon, label: 'Dashboard' },
     { id: 'tools', icon: WrenchScrewdriverIcon, label: 'Herramientas' },
-    { id: 'lototo', icon: WrenchScrewdriverIcon, label: 'LOTOTO' },
+    { id: 'loto', icon: ShieldCheckIcon, label: 'LOTOTO' },
     { id: 'checkinout', icon: ArrowRightLeftIcon, label: 'Préstamo/Devolución' },
     { id: 'reports', icon: ChartBarIcon, label: 'Reportes' },
     { id: 'settings', icon: CogIcon, label: 'Configuración' },
