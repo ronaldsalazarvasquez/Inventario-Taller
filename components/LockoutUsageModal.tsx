@@ -56,7 +56,7 @@ export const LockoutUsageModal: React.FC<Props> = ({ deviceId, onClose, onSucces
   if (!device) return null;
 
   return (
-    <Modal onClose={onClose} title="Registrar Uso de Dispositivo LOTO">
+    <Modal isOpen={true} onClose={onClose} title="Registrar Uso de Dispositivo LOTO" size="lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Info del dispositivo */}
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">

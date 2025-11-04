@@ -60,7 +60,7 @@ export const LockoutDeviceFormModal: React.FC<Props> = ({ deviceId, onClose, onS
   };
 
   return (
-    <Modal onClose={onClose} title={isEditing ? 'Editar Dispositivo LOTO' : 'Añadir Dispositivo LOTO'}>
+    <Modal isOpen={true} onClose={onClose} title={isEditing ? 'Editar Dispositivo LOTO' : 'Añadir Dispositivo LOTO'} size="2xl">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Código */}

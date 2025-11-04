@@ -1,5 +1,3 @@
-// components/LOTO.tsx
-
 import React, { useState, useMemo } from 'react';
 import { useData } from '../context/DataContext';
 import { LockoutDevice, LockoutDeviceStatus, LockoutDeviceType, UserRole } from '../types';

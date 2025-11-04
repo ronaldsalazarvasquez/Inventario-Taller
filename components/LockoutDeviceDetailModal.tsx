@@ -1,5 +1,3 @@
-// components/LockoutDeviceDetailModal.tsx
-
 import React from 'react';
 import { useData } from '../context/DataContext';
 import { Modal } from './common/Modal';
@@ -21,7 +19,7 @@ export const LockoutDeviceDetailModal: React.FC<Props> = ({ deviceId, onClose })
   if (!device) return null;
 
   return (
-    <Modal onClose={onClose} title="Detalles del Dispositivo LOTO">
+    <Modal isOpen={true} onClose={onClose} title="Detalles del Dispositivo LOTO" size="2xl">
       <div className="space-y-6">
         {/* Imagen y datos básicos */}
         <div className="flex items-start gap-4">
