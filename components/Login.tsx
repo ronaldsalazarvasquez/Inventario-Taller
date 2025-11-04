@@ -100,7 +100,7 @@ export const Login: React.FC = () => {
                   autoFocus
                   required
                   className="relative w-full px-4 md:px-5 py-3 md:py-4 bg-white border-2 border-gray-200 rounded-xl md:rounded-2xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all duration-300 hover:border-orange-300 hover:shadow-lg font-medium text-base md:text-lg"
-                  placeholder="USER-XXX"
+                  placeholder="Share ID"
                 />
                 <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
                   <div className={`w-2 h-2 rounded-full bg-gradient-to-r from-rose-400 to-amber-400 transition-all duration-300 ${userId ? 'opacity-100 animate-pulse' : 'opacity-0'}`}></div>

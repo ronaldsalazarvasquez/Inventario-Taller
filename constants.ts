@@ -1,10 +1,10 @@
 import { Tool, User, LoanRecord, ToolStatus, ToolCategory, Shift, UserRole, LockoutDevice, LockoutDeviceType, LockoutDeviceStatus } from './types';
 
 export const MOCK_USERS: User[] = [
-  { id: 'USER-001', name: 'Juan Perez', role: UserRole.Mechanic, avatarUrl: 'https://i.pravatar.cc/150?u=USER-001', accessZones: ['Taller Principal', 'Almacén A'], password: 'password123' },
-  { id: 'USER-002', name: 'Maria Garcia', role: UserRole.Electric, avatarUrl: 'https://i.pravatar.cc/150?u=USER-002', accessZones: ['Taller Principal', 'Zona de Eléctricos', 'Almacén B'], password: 'password123' },
-  { id: 'USER-003', name: 'Carlos Rodriguez', role: UserRole.Supervisor, avatarUrl: 'https://i.pravatar.cc/150?u=USER-003', accessZones: ['Taller Principal', 'Oficina', 'Almacén A', 'Almacén B'], password: 'password123' },
-  { id: 'USER-004', name: 'Ana Martinez', role: UserRole.Administrator, avatarUrl: 'https://i.pravatar.cc/150?u=USER-004', accessZones: ['*'], password: 'password123' },
+  { id: '94103440', name: 'Alfonzo Custodio', role: UserRole.Mechanic, avatarUrl: 'https://i.pravatar.cc/150?u=USER-001', accessZones: ['Taller Principal', 'Almacén A'], password: '123' },
+  { id: '94103441', name: 'Bruce Laurente', role: UserRole.Electric, avatarUrl: 'https://i.pravatar.cc/150?u=USER-002', accessZones: ['Taller Principal', 'Zona de Eléctricos', 'Almacén B'], password: '123' },
+  { id: '94103442', name: 'Jose atencio', role: UserRole.Supervisor, avatarUrl: 'https://i.pravatar.cc/150?u=USER-003', accessZones: ['Taller Principal', 'Oficina', 'Almacén A', 'Almacén B'], password: 'password123' },
+  { id: '94103444', name: 'Ronald Salazar', role: UserRole.Administrator, avatarUrl: 'https://i.pravatar.cc/150?u=USER-004', accessZones: ['*'], password: '123' },
 ];
 
 export const MOCK_TOOLS: Tool[] = [
