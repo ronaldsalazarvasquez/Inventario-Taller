@@ -1,5 +1,3 @@
-// components/LockoutDeviceFormModal.tsx
-
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { LockoutDeviceType, LockoutDeviceStatus } from '../types';

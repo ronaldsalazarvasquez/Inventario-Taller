@@ -1,5 +1,4 @@
-
-import { Tool, User, LoanRecord, ToolStatus, ToolCategory, Shift, UserRole } from './types';
+import { Tool, User, LoanRecord, ToolStatus, ToolCategory, Shift, UserRole, LockoutDevice, LockoutDeviceType, LockoutDeviceStatus } from './types';
 
 export const MOCK_USERS: User[] = [
   { id: 'USER-001', name: 'Juan Perez', role: UserRole.Mechanic, avatarUrl: 'https://i.pravatar.cc/150?u=USER-001', accessZones: ['Taller Principal', 'Almacén A'], password: 'password123' },
@@ -114,7 +113,114 @@ export const MOCK_LOAN_RECORDS: LoanRecord[] = [
     { id: 'loan-3', toolId: 'ELEC-001', userId: 'USER-002', checkoutDate: '2023-10-25T10:00:00Z', checkinDate: '2023-10-25T14:30:00Z', shift: Shift.T1 },
     { id: 'loan-4', toolId: 'MECH-002', userId: 'USER-003', checkoutDate: '2024-05-10T09:00:00Z', checkinDate: '2024-05-10T17:00:00Z', shift: Shift.T1 },
     { id: 'loan-5', toolId: 'ELEC-001', userId: 'USER-003', checkoutDate: '2024-05-12T11:00:00Z', checkinDate: '2024-05-12T15:00:00Z', shift: Shift.T1 },
+];
 
+// Datos LOTO (Lockout/Tagout)
+export const MOCK_LOCKOUT_DEVICES: LockoutDevice[] = [
+  {
+    id: 'LOTO-E-001',
+    name: 'Candado Eléctrico Rojo #1',
+    type: LockoutDeviceType.Electric,  // ← Cambiado de Electrical a Electric
+    status: LockoutDeviceStatus.Available,
+    brand: 'Master Lock',
+    color: 'Rojo',
+    acquisitionDate: '2024-01-15',
+    location: 'Almacén Principal - Estante B-2',
+    description: 'Candado de seguridad para bloqueo eléctrico - Resistente a corrosión',
+    observations: 'En buen estado',
+    imageUrl: 'https://placehold.co/100x100/dc2626/ffffff?text=LOTO-E',
+  },
+  {
+    id: 'LOTO-E-002',
+    name: 'Candado Eléctrico Amarillo #2',
+    type: LockoutDeviceType.Electric,
+    status: LockoutDeviceStatus.Available,
+    brand: 'Master Lock',
+    color: 'Amarillo',
+    acquisitionDate: '2024-01-15',
+    location: 'Almacén Principal - Estante B-2',
+    description: 'Candado de seguridad para bloqueo eléctrico - Alta visibilidad',
+    observations: 'En buen estado',
+    imageUrl: 'https://placehold.co/100x100/eab308/ffffff?text=LOTO-E',
+  },
+  {
+    id: 'LOTO-E-003',
+    name: 'Candado Eléctrico Azul #3',
+    type: LockoutDeviceType.Electric,
+    status: LockoutDeviceStatus.Available,
+    brand: 'Master Lock',
+    color: 'Azul',
+    acquisitionDate: '2024-01-20',
+    location: 'Almacén Principal - Estante B-2',
+    description: 'Candado de seguridad para bloqueo eléctrico - Uso general',
+    observations: 'En buen estado',
+    imageUrl: 'https://placehold.co/100x100/2563eb/ffffff?text=LOTO-E',
+  },
+  {
+    id: 'LOTO-M-001',
+    name: 'Bloqueo de Válvula Universal',
+    type: LockoutDeviceType.Mechanical,
+    status: LockoutDeviceStatus.Available,
+    brand: 'Brady',
+    color: 'Rojo',
+    acquisitionDate: '2024-02-01',
+    location: 'Área de Mantenimiento - Gabinete 5',
+    description: 'Dispositivo de bloqueo para válvulas de 1" a 6"',
+    observations: 'Compatible con múltiples tamaños',
+    imageUrl: 'https://placehold.co/100x100/dc2626/ffffff?text=LOTO-M',
+  },
+  {
+    id: 'LOTO-M-002',
+    name: 'Bloqueo de Interruptor Grande',
+    type: LockoutDeviceType.Mechanical,
+    status: LockoutDeviceStatus.Available,
+    brand: 'Brady',
+    color: 'Amarillo',
+    acquisitionDate: '2024-02-01',
+    location: 'Área de Mantenimiento - Gabinete 5',
+    description: 'Dispositivo de bloqueo para interruptores de pared y tableros',
+    observations: 'Uso en tableros eléctricos',
+    imageUrl: 'https://placehold.co/100x100/eab308/ffffff?text=LOTO-M',
+  },
+  {
+    id: 'LOTO-M-003',
+    name: 'Bloqueo de Válvula de Bola',
+    type: LockoutDeviceType.Mechanical,
+    status: LockoutDeviceStatus.Available,
+    brand: 'Brady',
+    color: 'Rojo',
+    acquisitionDate: '2024-02-10',
+    location: 'Área de Mantenimiento - Gabinete 5',
+    description: 'Dispositivo específico para válvulas de bola',
+    observations: 'Específico para válvulas de bola',
+    imageUrl: 'https://placehold.co/100x100/dc2626/ffffff?text=LOTO-M',
+  },
+  {
+    id: 'LOTO-E-004',
+    name: 'Candado Eléctrico Verde #4',
+    type: LockoutDeviceType.Electric,
+    status: LockoutDeviceStatus.Available,
+    brand: 'Master Lock',
+    color: 'Verde',
+    acquisitionDate: '2024-02-15',
+    location: 'Almacén Principal - Estante B-2',
+    description: 'Candado de seguridad para bloqueo eléctrico - Mantenimiento preventivo',
+    observations: 'Para mantenimiento preventivo',
+    imageUrl: 'https://placehold.co/100x100/16a34a/ffffff?text=LOTO-E',
+  },
+  {
+    id: 'LOTO-M-004',
+    name: 'Bloqueo de Enchufe',
+    type: LockoutDeviceType.Mechanical,
+    status: LockoutDeviceStatus.Available,
+    brand: 'Brady',
+    color: 'Amarillo',
+    acquisitionDate: '2024-02-20',
+    location: 'Área de Mantenimiento - Gabinete 5',
+    description: 'Dispositivo de bloqueo para enchufes eléctricos',
+    observations: 'Para enchufes estándar',
+    imageUrl: 'https://placehold.co/100x100/eab308/ffffff?text=LOTO-M',
+  },
 ];
 
 export const STATUS_STYLES: { [key in ToolStatus]: { bg: string; text: string; border: string } } = {
@@ -122,4 +228,11 @@ export const STATUS_STYLES: { [key in ToolStatus]: { bg: string; text: string; b
   [ToolStatus.Borrowed]: { bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-500' },
   [ToolStatus.InMaintenance]: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-500' },
   [ToolStatus.Decommissioned]: { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-500' },
+};
+
+export const LOCKOUT_STATUS_STYLES: { [key in LockoutDeviceStatus]: { bg: string; text: string; border: string } } = {
+  [LockoutDeviceStatus.Available]: { bg: 'bg-emerald-100', text: 'text-emerald-800', border: 'border-emerald-500' },
+  [LockoutDeviceStatus.InUse]: { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-500' },
+  [LockoutDeviceStatus.Damaged]: { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-500' },
+  [LockoutDeviceStatus.OutOfService]: { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-500' },
 };

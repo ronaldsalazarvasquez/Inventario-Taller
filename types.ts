@@ -139,6 +139,7 @@ export interface LockoutDevice {
   color?: string;
   acquisitionDate: string;
   location: string;
+  description?: string;
   observations?: string;
   imageUrl?: string;
   currentUserId?: string;

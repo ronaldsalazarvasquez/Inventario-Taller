@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { 
   Tool, User, LoanRecord, DecommissionRecord, MaintenanceRecord, 
-  ToolStatus, ToolCategory, Shift, ReplacementStatus, UserRole, 
-  MaintenanceType, Notification, NotificationType,
+  ToolStatus, Shift, ReplacementStatus, MaintenanceType, 
+  Notification, NotificationType,
   LockoutDevice, LockoutUsageRecord, LockoutDeviceStatus 
 } from '../types';
-import { MOCK_TOOLS, MOCK_USERS, MOCK_LOAN_RECORDS } from '../constants';
+import { MOCK_TOOLS, MOCK_USERS, MOCK_LOAN_RECORDS, MOCK_LOCKOUT_DEVICES } from '../constants';
 
 interface AppSettings {
     calibrationWarningDays: number;
@@ -38,8 +38,9 @@ interface DataContextType {
   markAllNotificationsAsRead: () => void;
   login: (userId: string, password: string) => boolean;
   logout: () => void;
-  addLockoutDevice: (device: Omit<LockoutDevice, 'currentUserId'>) => void;
+  addLockoutDevice: (device: Omit<LockoutDevice, 'id'>) => void;
   updateLockoutDevice: (id: string, updates: Partial<LockoutDevice>) => void;
+  deleteLockoutDevice: (id: string) => void;
   addLockoutUsageRecord: (data: Omit<LockoutUsageRecord, 'id' | 'startDate'>) => void;
   endLockoutUsage: (recordId: string) => void;
 }
@@ -54,7 +55,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [settings, setSettings] = useState<AppSettings>({ calibrationWarningDays: 30 });
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
-  const [lockoutDevices, setLockoutDevices] = useState<LockoutDevice[]>([]);
+  const [lockoutDevices, setLockoutDevices] = useState<LockoutDevice[]>(MOCK_LOCKOUT_DEVICES);
   const [lockoutUsageRecords, setLockoutUsageRecords] = useState<LockoutUsageRecord[]>([]);
   const [decommissionRecords, setDecommissionRecords] = useState<DecommissionRecord[]>([
     {
@@ -246,45 +247,65 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setSettings(prev => ({...prev, ...newSettings}));
   };
 
-  // ========== FUNCIONES LOTO ==========
-  const addLockoutDevice = (device: Omit<LockoutDevice, 'currentUserId'>) => {
-    setLockoutDevices(prev => [...prev, { ...device, currentUserId: undefined }]);
+  const addLockoutDevice = (deviceData: Omit<LockoutDevice, 'id'>) => {
+    const newDevice: LockoutDevice = {
+      ...deviceData,
+      id: `LOTO-${deviceData.type.charAt(0)}-${Date.now().toString().slice(-3)}`,
+    };
+    setLockoutDevices(prev => [...prev, newDevice]);
+    addNotification(NotificationType.CheckOut, `Dispositivo LOTO ${newDevice.name} agregado.`);
   };
 
   const updateLockoutDevice = (id: string, updates: Partial<LockoutDevice>) => {
     setLockoutDevices(prev => prev.map(d => d.id === id ? { ...d, ...updates } : d));
   };
 
+  const deleteLockoutDevice = (id: string) => {
+    const device = lockoutDevices.find(d => d.id === id);
+    if (device?.status === LockoutDeviceStatus.InUse) {
+      addNotification(NotificationType.Maintenance, `No se puede eliminar ${device.name} porque está en uso.`);
+      return;
+    }
+    setLockoutDevices(prev => prev.filter(d => d.id !== id));
+    addNotification(NotificationType.Decommission, `Dispositivo LOTO eliminado.`);
+  };
+
   const addLockoutUsageRecord = (data: Omit<LockoutUsageRecord, 'id' | 'startDate'>) => {
+    const device = lockoutDevices.find(d => d.id === data.deviceId);
+    if (!device || device.status === LockoutDeviceStatus.InUse) return;
+
     const newRecord: LockoutUsageRecord = {
       ...data,
       id: `LUR-${Date.now()}`,
       startDate: new Date().toISOString(),
     };
-    setLockoutUsageRecords(prev => [...prev, newRecord]);
     
-    // Actualizar estado del dispositivo
+    setLockoutUsageRecords(prev => [...prev, newRecord]);
     setLockoutDevices(prev => prev.map(d => 
       d.id === data.deviceId 
         ? { ...d, status: LockoutDeviceStatus.InUse, currentUserId: data.userId }
         : d
     ));
+    
+    addNotification(NotificationType.CheckOut, `Dispositivo LOTO ${device.name} registrado en uso.`);
   };
 
   const endLockoutUsage = (recordId: string) => {
     const record = lockoutUsageRecords.find(r => r.id === recordId);
-    if (!record) return;
+    if (!record || record.endDate) return;
     
     setLockoutUsageRecords(prev => prev.map(r => 
       r.id === recordId ? { ...r, endDate: new Date().toISOString() } : r
     ));
     
-    // Actualizar estado del dispositivo
     setLockoutDevices(prev => prev.map(d => 
       d.id === record.deviceId 
         ? { ...d, status: LockoutDeviceStatus.Available, currentUserId: undefined }
         : d
     ));
+    
+    const device = lockoutDevices.find(d => d.id === record.deviceId);
+    addNotification(NotificationType.CheckIn, `Dispositivo LOTO ${device?.name} liberado.`);
   };
 
   return (
@@ -317,6 +338,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       lockoutUsageRecords,
       addLockoutDevice,
       updateLockoutDevice,
+      deleteLockoutDevice,
       addLockoutUsageRecord,
       endLockoutUsage
     }}>
